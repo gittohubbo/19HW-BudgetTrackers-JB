@@ -16,11 +16,11 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect( process.env.MONGODB_URI || `mongodb://localhost/${process.env.DB_NAME}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
+mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/${process.env.database}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 // routes
