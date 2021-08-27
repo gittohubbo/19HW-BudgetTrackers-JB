@@ -1,14 +1,13 @@
-// const { response } = require("express");
 
 const indexedDB =
     window.indexedDB ||
     window.mozIndexedDB ||
     window.webkitIndexedDB ||
     window.msIndexedDB ||
-    window.shinIndexedDB;
+    window.shimIndexedDB;
 
 let database;
-const request =indexedDB.open("budget", 1);
+const request = indexedDB.open("budget", 1);
 
 request.onupgradeneeded = ({ target }) => {
     let database = target.result;
@@ -23,8 +22,8 @@ request.onsuccess = ({ target }) => {
     }
 };
 
-request.onerror = function(event) {
-console.log("Error! " + event.target.errorCode);
+request.onerror = function (event) {
+    console.log("Error! " + event.target.errorCode);
 };
 
 function saveRecord(record) {
@@ -39,7 +38,7 @@ function checkDatabase() {
     const store = transaction.objectStore("pending");
     const getAll = store.getAll();
 
-    getAll.onsuccess = function() {
+    getAll.onsuccess = function () {
         if (getAll.result.length > 0) {
             fetch("/api/transaction/bulk", {
                 method: "POST",
@@ -49,16 +48,16 @@ function checkDatabase() {
                     "Content-Type": "application/json"
                 }
             })
-            .then(response => {
-                return response.json();
-            })
-            .then(() => {
-                const transaction = database.transaction(["pending"], "readwrite");
-                const store = transaction.objectStore("pending");
-                store.clear();
-            })
+                .then(response => {
+                    return response.json();
+                })
+                .then(() => {
+                    const transaction = database.transaction(["pending"], "readwrite");
+                    const store = transaction.objectStore("pending");
+                    store.clear();
+                });
         }
-    }
+    };
 }
 
 window.addEventListener("online", checkDatabase);
